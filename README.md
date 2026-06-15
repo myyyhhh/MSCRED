@@ -1,48 +1,48 @@
-# MSCRED Anomaly Detection on Online Boutique
+# MSCRED — Online Boutique 微服务异常检测复现
 
-Reproduction of the AAAI 2019 MSCRED paper — unsupervised anomaly detection on multivariate time series from the [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) microservices system.
+AAAI 2019 MSCRED 论文的复现实验：在 [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) 微服务系统上，基于 Prometheus 多维时序指标进行无监督异常检测。
 
 | | |
 |:---|:---|
-| **Paper** | [A Deep Neural Network for Unsupervised Anomaly Detection and Diagnosis in Multivariate Time Series Data (AAAI 2019)](https://doi.org/10.1609/aaai.v33i01.33011409) |
-| **Experiment** | MSCRED on 84 monitoring sensors × 1878 time steps with 9 Chaos Mesh fault injections |
-| **Best F1** | **0.522** (Precision 0.444, Recall 0.632) |
+| **论文** | [A Deep Neural Network for Unsupervised Anomaly Detection and Diagnosis in Multivariate Time Series Data (AAAI 2019)](https://doi.org/10.1609/aaai.v33i01.33011409) |
+| **实验** | MSCRED 在 84 个监控传感器 × 1878 时间步上，注入 9 次 Chaos Mesh 故障 |
+| **最佳 F1** | **0.522**（精确率 0.444，召回率 0.632） |
 
-## Structure
+## 仓库结构
 
 ```
-MSCRED/           ← Core MSCRED model, data, and experiment report
-  code/           ← Model implementation (TensorFlow 1.x)
-  data/           ← Sensor matrix, anomaly labels, signature matrices
-  MSCRED_model/   ← Trained checkpoints (generated)
+MSCRED/           ← MSCRED 模型核心：代码、数据、实验报告
+  code/           ← 模型实现（TensorFlow 1.x）
+  data/           ← 传感器矩阵、异常标签、签名矩阵
+  MSCRED_model/   ← 训练好的模型检查点（已 gitignore，可重建）
   AAAI19-MSCRED.pdf
-  实验报告.md      ← Detailed experiment report (Chinese)
+  实验报告.md      ← 详细实验报告
 
-ob_etl/           ← ETL pipeline for Prometheus monitoring data
+ob_etl/           ← Prometheus 监控数据 ETL 流水线
   etl_from_prometheus.py
   build_kpi_matrix.py
   preprocess.py
 ```
 
-## Quick Start
+## 快速复现
 
 ```bash
-# Generate signature matrices
+# 1. 生成签名矩阵（多尺度）
 python MSCRED/code/matrix_generator.py \
     --raw_data_path MSCRED/data/online_boutique_sensors.csv \
     --save_data_path MSCRED/data/
 
-# Train (5 epochs)
+# 2. 训练（5 个 epoch 为最优）
 python MSCRED/code/MSCRED_TF.py \
     --train_test_label 1 --sensor_n 84 --training_iters 5
 
-# Test
+# 3. 测试 + 评估
 python MSCRED/code/MSCRED_TF.py --train_test_label 0
 python MSCRED/code/evaluate_ob.py
 ```
 
-See [MSCRED/README.md](MSCRED/README.md) for full details.
+详细说明请见 [MSCRED/README.md](MSCRED/README.md)。
 
-## Data Source
+## 数据来源
 
-Raw Prometheus metrics were collected from a minikube deployment of Online Boutique with Chaos Mesh fault injection. The preprocessed 84-sensor matrix (`online_boutique_sensors.csv`) is included in this repository — no external data download required.
+原始 Prometheus 指标通过 minikube 部署的 Online Boutique 系统采集，使用 Chaos Mesh 注入故障。预处理后的 84 维传感器矩阵（`online_boutique_sensors.csv`）已包含在仓库中，无需额外下载。
