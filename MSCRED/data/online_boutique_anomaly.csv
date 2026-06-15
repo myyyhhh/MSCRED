@@ -1,0 +1,12 @@
+# 格式: raw_data_index, root_cause_sensor_1, root_cause_sensor_2, root_cause_sensor_3
+# 传感器索引已更新为 70 sensors 版本 (移除了 loadgenerator + redis-cart)
+# frontend=[5,15,25,35,45,55,65]  checkoutservice=[2,12,22,32,42,52,62]  recommendationservice=[8,18,28,38,48,58,68]
+1441,5,15,25
+1482,2,12,22
+1534,8,18,28
+1587,5,15,25
+1627,2,12,22
+1679,8,18,28
+1732,5,15,25
+1772,2,12,22
+1825,8,18,28
