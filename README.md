@@ -1,5 +1,7 @@
 # MSCRED — Online Boutique 微服务异常检测复现
 
+> 软件测试与维护论文复现工作
+
 AAAI 2019 MSCRED 论文的复现实验：在 [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) 微服务系统上，基于 Prometheus 多维时序指标进行无监督异常检测。
 
 | | |
